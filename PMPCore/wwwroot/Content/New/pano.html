@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Pano | UTS Görev Takip Sistemi</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Bootstrap core CSS-->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!--  Material Dashboard CSS    -->
+    <link href="assets/css/material-dashboard.css?v=1.2.1" rel="stylesheet" />
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="assets/css/demo.css" rel="stylesheet" />
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body class="inverse">
+    <div class="wrapper">
+        <div class="sidebar" data-active-color="blue" data-background-color="black"
+            style="background: #232323; /* fallback for old browsers */ background: -webkit-linear-gradient(to right, #232323, #000000); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(to bottom, #232323, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+            <!--
+        Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
+        Tip 2: you can also add an image using data-image tag
+        Tip 3: you can change the color of the sidebar with data-background-color="white | black"
+    -->
+            <div class="logo text-center text-info">
+                <h5>GÖREV TAKİP SİSTEMİ</h5>
+            </div>
+            <div class="sidebar-wrapper">
+                <div class="user">
+                    <div class="photo">
+                        <img src="assets/img/faces/avatar.png" />
+                    </div>
+                    <div class="info">
+                        <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                            <span>
+                                Egemen YAŞAYACAK
+                                <b class="caret"></b>
+                            </span>
+                        </a>
+                        <div class="clearfix"></div>
+                        <div class="collapse" id="collapseExample">
+                            <ul class="nav">
+                                <li>
+                                    <a href="#">
+                                        <span class="sidebar-mini">
+                                            <i class="material-icons">person</i>
+                                        </span>
+                                        <span class="sidebar-normal"> Hesabım </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="sidebar-mini">
+                                            <i class="material-icons">lock</i>
+                                        </span>
+                                        <span class="sidebar-normal"> Çıkış Yap </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav">
+                    <li>
+                        <a href="index.html">
+                            <i class="material-icons">dashboard</i>
+                            <p> Panel </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="yolHaritasi.html">
+                            <i class="material-icons">call_split</i>
+                            <p> Yol Haritası </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="gorevler.html">
+                            <i class="material-icons">short_text</i>
+                            <p> Görevler </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="sprint.html">
+                            <i class="material-icons">view_list</i>
+                            <p> Sprint </p>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="pano.html">
+                            <i class="material-icons">tab</i>
+                            <p> Pano </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="projeler.html">
+                            <i class="material-icons">work</i>
+                            <p> Projeler </p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <nav class="navbar navbar-inverse navbar-transparent navbar-absolute">
+                <div class="container-fluid">
+                    <div class="navbar-minimize">
+                        <button id="minimizeSidebar" class="btn btn-simple btn-white btn-round btn-just-icon">
+                            <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+                            <i class="material-icons visible-on-sidebar-mini">view_list</i>
+                        </button>
+                    </div>
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#"> Pano </a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <button class="btn btn-warning btn-round">
+                                    <i class="material-icons">view_list</i> SPRINTI BİTİR
+                                </button>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="material-icons">notifications</i>
+                                    <span class="notification">3</span>
+                                    <p class="hidden-lg hidden-md">
+                                        Notifications
+                                        <b class="caret"></b>
+                                    </p>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#">Yeni bir görev ataması!</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Bir görevin süresi doldu!</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Yeni bir bildirim!</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="separator hidden-lg hidden-md">
+                                
+                            </li>
+                        </ul>
+                        <form class="navbar-form navbar-right" role="search">
+                            <div class="form-group form-search is-empty">
+                                <input type="text" class="form-control" placeholder=" Arama ">
+                                <span class="material-input"></span>
+                            </div>
+                            <button type="submit" class="btn btn-simple btn-white btn-round btn-just-icon">
+                                <i class="material-icons">search</i>
+                                <div class="ripple-container"></div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="col-md-12 px-0 pb-5">
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-3">
+                            <div class="card"
+                                style="background: #191919; color: white; box-shadow: 0px 0px 4px 1px #46464696; border-radius: 5px; min-height: 60vh; height: 100%;">
+                                <div class="card-header text-center" data-background-color="blue"
+                                    data-header-animation="true">
+                                    <h4 class="my-4"><b style="color:white;">YAPILACAKLAR</b></h4>
+                                </div>
+                                <div class="card-content p-5" style="padding-top:60px !important;">
+                                    <div class="card-actions">
+                                        <button type="button" class="btn btn-danger btn-simple" rel="tooltip"
+                                            data-placement="bottom" title="" data-original-title="Kaldır">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-simple" rel="tooltip"
+                                            data-placement="bottom" title="" data-original-title="Düzenle">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+                                    </div>
+                                    <div class="card"
+                                        style="background: #1b1b1b; color: white; box-shadow: 0px 0px 4px -1px #ffffff63; border-radius: 5px;">
+                                        <div class="card-header card-header-icon" data-background-color="red">
+                                            <h6><small><b style="color:white;">Egemen YAŞAYACAK</b></small></h6>
+                                        </div>
+                                        <div class="card-content">
+                                            <h4 class="card-title" style="color:white;">HARİTA İŞLEMLERİ</h4>
+                                            <p class="text-justify my-4">
+                                                Harita üzerinde farklı katmanlar eklenebilmelidir. Dışarıdan harita
+                                                katmanı sistem üzerine eklenebilmelidir. (MAP LAYER IMPORT)
+                                            </p>
+                                        </div>
+                                        <div class="card-footer" style="border-top: 1px solid #404040;">
+                                            <div class="stats py-2">
+                                                <span style="display: inline-block;"
+                                                    class="label label-danger my-2 mx-1">Berke ELMASTAŞ</span>
+                                                <span style="display: inline-block;"
+                                                    class="label label-danger my-2 mx-1">Gülcan AYDOĞAN</span>
+                                                <span style="display: inline-block;"
+                                                    class="label label-danger my-2 mx-1">Kaan YILMAZ</span>
+                                                <span style="display: inline-block;"
+                                                    class="label label-danger my-2 mx-1">Arda ÖZCAN</span>
+                                            </div>
+                                        </div>
+                                        <!-- end content-->
+                                        <!--  end card  -->
+                                    </div>
+                                    <div class="card mt-5"
+                                        style="background: #1b1b1b; color: white; box-shadow: 0px 0px 4px -1px #ffffff63; border-radius: 5px;">
+                                        <div class="card-header card-header-icon" data-background-color="red">
+                                            <h6><small><b style="color:white;">Berke ELMASTAŞ</b></small></h6>
+                                        </div>
+                                        <div class="card-content">
+
+                                            <h4 class="card-title" style="color:white;">FİLTRE İŞLEMLERİ</h4>
+                                            <p class="text-justify my-4">
+                                                Kullanıcılar kendi hesaplarında değişik filtreler oluşturabilmelidir. Bu
+                                                filtreler kısayol olarak kayıt edilebilir ve kullanıcının oluştuğu
+                                                filtre diğer kullanıcılar tarafından görülmemelidir.
+                                            </p>
+                                        </div>
+                                        <div class="card-footer" style="border-top: 1px solid #404040;">
+                                            <div class="stats py-2">
+                                                <span style="display: inline-block;"
+                                                    class="label label-danger my-2 mx-1">Gülcan AYDOĞAN</span>
+                                                <span style="display: inline-block;"
+                                                    class="label label-danger my-2 mx-1">Arda ÖZCAN</span>
+                                            </div>
+                                        </div>
+                                        <!-- end content-->
+                                        <!--  end card  -->
+                                    </div>
+                                </div>
+                                <!-- end content-->
+                                <!--  end card  -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card"
+                                style="background: #191919; color: white; box-shadow: 0px 0px 4px 1px #46464696; border-radius: 5px; min-height: 60vh; height: 100%;">
+                                <div class="card-header text-center" data-background-color="blue"
+                                    data-header-animation="true">
+                                    <h4 class="my-4"><b style="color:white;">YAPILIYOR</b></h4>
+                                </div>
+                                <div class="card-content pt-5">
+                                    <div class="card-actions">
+                                        <button type="button" class="btn btn-danger btn-simple" rel="tooltip"
+                                            data-placement="bottom" title="" data-original-title="Kaldır">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-simple" rel="tooltip"
+                                            data-placement="bottom" title="" data-original-title="Düzenle">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- end content-->
+                                <!--  end card  -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card"
+                                style="background: #191919; color: white; box-shadow: 0px 0px 4px 1px #46464696; border-radius: 5px; min-height: 60vh; height: 100%;">
+                                <div class="card-header text-center" data-background-color="blue"
+                                    data-header-animation="true">
+                                    <h4 class="my-4"><b style="color:white;">TAMAMLANDI</b></h4>
+                                </div>
+                                <div class="card-content pt-5">
+                                    <div class="card-actions">
+                                        <button type="button" class="btn btn-danger btn-simple" rel="tooltip"
+                                            data-placement="bottom" title="" data-original-title="Kaldır">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-simple" rel="tooltip"
+                                            data-placement="bottom" title="" data-original-title="Düzenle">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- end content-->
+                                <!--  end card  -->
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="min-height:50vh;">
+                            <button class="btn btn-info btn-round btn-fab" rel="tooltip" data-placement="top" title=""
+                                data-original-title="Kolon Ekle" data-toggle="modal" data-target="#panoEkleModal"
+                                style="position: absolute; top: 50%; left: 50%;">
+                                <i class="material-icons">add</i>
+                            </button>
+                            <!-- KOLON EKLE MODAL -->
+                            <div class="modal fade" id="panoEkleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog modal-login">
+                                    <div class="modal-content">
+                                        <div class="card card-signup card-plain">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true"><i class="material-icons">clear</i></button>
+
+                                                <div class="header header-info text-center">
+                                                    <h4 class="card-title">Kolon Ekle</h4>
+                                                    <p class="description text-center" style="color:white;">Buradan
+                                                        proje ekleyebilirsiniz.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-body mr-5 ml-4">
+                                                <form class="form" method="" action="">
+                                                    <div class="card-content py-4">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="material-icons">text_format</i>
+                                                            </span>
+                                                            <div class="form-group is-empty"><input type="text"
+                                                                    class="form-control" style="color:black!important;"
+                                                                    placeholder="Kolon adını giriniz.">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer text-center m-5 my-auto py-4"
+                                                style="border-top: 1px solid #f1efef;">
+                                                <button href="#" class="btn btn-info btn-round"><i
+                                                        class="material-icons">save_alt</i> Kaydet</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- KOLON EKLE MODAL -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer py-0">
+                <div class="container-fluid">
+                    <p class="copyright pull-right">
+                        &copy;
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script>
+                        <a href="#"> UTS </a> GÖREV TAKİP SİSTEMİ
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+<!--   Core JS Files   -->
+<script src="assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="assets/js/material.min.js" type="text/javascript"></script>
+<script src="assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+<!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+<!-- Library for adding dinamically elements -->
+<script src="assets/js/arrive.min.js" type="text/javascript"></script>
+<!-- Forms Validations Plugin -->
+<script src="assets/js/jquery.validate.min.js"></script>
+<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+<script src="assets/js/moment.min.js"></script>
+<!--  Charts Plugin, full documentation here: https://gionkunz.github.io/chartist-js/ -->
+<script src="assets/js/chartist.min.js"></script>
+<!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+<script src="assets/js/jquery.bootstrap-wizard.js"></script>
+<!--  Notifications Plugin, full documentation here: http://bootstrap-notify.remabledesigns.com/    -->
+<script src="assets/js/bootstrap-notify.js"></script>
+<!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+<script src="assets/js/bootstrap-datetimepicker.js"></script>
+<!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
+<script src="assets/js/jquery-jvectormap.js"></script>
+<!-- Sliders Plugin, full documentation here: https://refreshless.com/nouislider/ -->
+<script src="assets/js/nouislider.min.js"></script>
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!--  Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+<script src="assets/js/jquery.select-bootstrap.js"></script>
+<!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
+<script src="assets/js/jquery.datatables.js"></script>
+<!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
+<script src="assets/js/sweetalert2.js"></script>
+<!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script src="assets/js/jasny-bootstrap.min.js"></script>
+<!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+<script src="assets/js/fullcalendar.min.js"></script>
+<!-- Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+<script src="assets/js/jquery.tagsinput.js"></script>
+<!-- Material Dashboard javascript methods -->
+<script src="assets/js/material-dashboard.js?v=1.2.1"></script>
+
+</html>
