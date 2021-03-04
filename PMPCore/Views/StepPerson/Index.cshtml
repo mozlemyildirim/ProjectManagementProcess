@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Durdur & Başlat";
+    ViewBag.ActivePageName = "Durdur & Başlat";
+}
+@model List<PMPDAL.Models.StartStopViewModel>
+
+<style>
+
+    .table > tbody > tr > td {
+        border-color: #486d89;
+        border-width: 3px;
+    }
+    .ps-scrollbar-y-rail {
+        top: 30px!important;
+        right: 0px!important;
+        height: 900px !important;
+    }
+    .ps-scrollbar-x-rail {
+        left: 0px;
+        bottom: -71px;
+    }
+</style>
+<div class="container-fluid">
+    <!-- AKTİF GÖREVLER BURADAN BAŞLIYOR -->
+    <div class="col-md-12 mb-5 pb-5">
+        <div class="card" style="background: #486d89; color: white; box-shadow: 0px 0px 9px 2px #48484896; height: 800px; border-radius: 10px;">
+
+            <div class="card-content">
+                <h4 class="card-title" style="color:white;"><b>DURDUR & BAŞLAT</b></h4>
+                <hr>
+
+                <div style="clear: both;"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table" style="width: 100%; background-color:#54bcc8; font-size:18px;">
+                            @{
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td style="vertical-align: middle;">@item.StepName</td>
+                                        <td style="vertical-align: middle;">@item.MilestoneName</td>
+                                        <td style="vertical-align: middle; width: 20%"><textarea placeholder="Durdurma açıklaması giriniz..." style="width: 100%; background-color: rgba(0,0,0,0.2); border: 1px solid #069eb085; resize: none; border-radius: 5px; color: white; padding: 5px; height: 70px; @Html.Raw(item.StartDate != null && item.EndDate == null ? "" : "display: none;")"></textarea></td>
+                                        <td style="vertical-align: middle; width: 5%;">@Html.Raw(item.StartDate != null && item.EndDate == null ? "<i style=\"font-size: 25px; color:#fc2216;\" onclick=\"changeStatus(" + item.Id + ", this)\" class=\"actionIcon fa fa-pause\"></i>" : "<i style=\"font-size: 25px;color:greenyellow;\" onclick=\"changeStatus(" + item.Id + ", this)\" class=\"actionIcon fa fa-play\"></i>")</td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+       function changeStatus(stepPersonId, elem)
+       {
+
+              var className = $(elem).attr("class").replace("fa fa-", "").trim().replace("actionIcon", "").trim();
+              var text = $(elem).parent().parent().find("textarea").val();
+
+              if(className == "pause" && text == "")
+              {
+                     swal('Lütfen açıklama alanını boş bırakmayınız!');
+                     return;
+              }
+
+              if(className == "pause")
+                     className = "stop";
+
+              $.ajax({
+               type: "POST",
+               url: '@Url.Action("ChangeStatus", "StepPerson")',
+               data: {
+                      "_stepPersonId" : stepPersonId,
+                      "_status" : className,
+                      "_desc" : text
+               },
+               success: function (data) {
+                      if(data)
+                            window.location.reload();
+               }
+              });
+
+       }
+</script>

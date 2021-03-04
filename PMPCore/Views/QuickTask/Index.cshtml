@@ -1,0 +1,825 @@
+﻿
+
+@{
+    ViewBag.Title = "Hızlı Görev";
+    ViewBag.ActivePageName = "Hızlı Görev";
+}
+
+<style>
+
+
+
+    .customInfoBox {
+        transition: all 0.5s;
+    }
+
+        .customInfoBox:hover {
+            color: #d2d2d2 !important;
+        }
+
+    .select2-container--default .select2-results > .select2-results__options {
+        background-color: #00bcd4 !important;
+    }
+
+    .select2-container--default .select2-results > .select2-results__options {
+        background-color: #00bcd4 !important;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #00bcd4;
+        border: 1px solid #00bcd4;
+        border-radius: 4px;
+        cursor: default;
+        float: left;
+        margin-right: 5px;
+        margin-top: 5px;
+        padding: 0 5px;
+        color: white;
+        font-family: sans-serif;
+        font-size: 11px;
+        border: 1px solid white;
+        font-weight: bold;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: bold;
+        margin-right: 3px;
+        color: white;
+        font-size: 15px;
+        /* margin-top: 5px; */
+        float: left;
+        margin-top: -1px;
+    }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+            color: red !important;
+        }
+
+    .select2-container--default.select2-container--focus .select2-selection--multiple {
+        border: solid #00bcd4 1.4px;
+        outline: 0;
+        max-height: 75px !important;
+        overflow-x: auto !important;
+    }
+
+
+    .select2-dropdown {
+        z-index: 12372832183728327432789 !important;
+    }
+</style>
+<script>
+    function showPopup(stepId, boardId, elem)
+    {
+         if ($("#handMadeToolTip").is(':visible'))
+            return;
+
+        boardId = $(elem).parent().parent().parent().parent().attr("id").replace("divOuter", "");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetStepHoverInfo", "Board")',
+            data: {
+                "_stepId": stepId,
+                "_boardId": boardId
+            },
+            success: function (data) {
+                var htmlStr = data;
+
+                var rect = elem.getBoundingClientRect();
+                var left = rect.left + "px";
+                var topd = rect.top + "px";
+
+                htmlStr = '<div style="position: absolute; top: ' + topd + '; left: ' + left + '; margin-left: 20px; background-color: rgba(0, 0, 0, 0.6); color: white; z-index: 12438714372393; padding: 10px; border-radius: 10px !important; font-weight: bold; font-size: 12px;" id="handMadeToolTip">' + htmlStr + "</div>";
+                $("body").append(htmlStr);
+            }
+        });
+    }
+
+</script>
+
+<div class="container-fluid" id="divMain">
+    <div class="row mt-5">
+    </div>
+</div>
+
+<div class="modal fade" id="projeEkleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style=" display: none;">
+    <div class="modal-dialog modal-login">
+        <div class="modal-content">
+            <div class="card card-signup card-plain">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <div class="header header-info text-center">
+                        <h4 class="card-title">Proje Ekle</h4>
+                        <p class="description text-center" style="color:white;">
+                            Buradan  proje ekleyebilirsiniz.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-body mr-5 ml-4">
+                    <form class="form" method="" action="">
+                        <div class="card-content py-4">
+                            <div class="input-group">
+                                <div class="form-group is-empty">
+                                    <input id="modalGorevEkleProjeId" value="0" style="display: none;">
+                                    <input id="modalGorevEkleProjeAdi" type="text" class="form-control" style="color: black!important;" placeholder="Proje adını giriniz.">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">short_text</i>
+                                </span>
+                                <div class="form-group is-empty">
+                                    <label class="label-control">Bitiş Tarihi</label>
+                                    <input style="color:black!important;" type="text"
+                                           class="form-control datepicker" id="EndDatePicker" value="" autocomplete="off" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-center m-5 my-auto py-4"
+                     style="border-top: 1px solid #f1efef;">
+                    <button onclick="savePano()" class="btn btn-info btn-round">
+                        <i class="material-icons">save_alt</i> Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="gorevEkleModalProje" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style=" display: none;">
+    <div class="modal-dialog modal-login">
+        <div class="modal-content">
+            <div class="card card-signup card-plain">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <div class="header header-info text-center">
+                        <h4 class="card-title">Görev Ekle</h4>
+                        <p class="description text-center" style="color:white;">
+                            Buradan  görev ekleyebilirsiniz.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-body mr-5 ml-4">
+                    <form class="form" method="" action="">
+                        <div class="card-content py-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">text_format</i>
+                                </span>
+                                <div id="divProjectSelect" class="form-group is-empty">
+
+                                </div>
+                                <div class="form-group is-empty">
+                                    <input id="gorevEkleProjeId" value="0" style="display: none;">
+                                    <input id="todoName" type="text" class="form-control" style="color: black!important;" placeholder="Görev adını giriniz.">
+                                </div>
+                            </div>
+                            @*<div class="form-group is-empty">
+                                    <label class="label-control">Bitiş Tarihi</label>
+                                    <input style="color:black!important;" type="datetime-local" class="form-control datepicker" id="todoEndDate" value="" autocomplete="off" />
+                                </div>*@
+                            <div class="form-group is-empty">
+                                <label class="label-control">Bitiş Tarihi</label>
+                                <input style="color:black!important;" type="text" class="form-control datepicker" id="todoEndDate" value="" autocomplete="off">
+                                <span class="material-input"></span>
+                            </div>
+
+                            <div id="divGorevEkleCalisanSecSelect2" class="form-group is-empty">
+                                <select class="form-control select2" multiple="multiple" data-placeholder="Çalışanları Seç" style="width: 100%;"></select>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">short_text</i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-center m-5 my-auto py-4"
+                     style="border-top: 1px solid #f1efef;">
+                    <button onclick="saveTodoProje()" class="btn btn-info btn-round">
+                        <i class="material-icons">save_alt</i> Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="gorevEkleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style=" display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="card card-signup card-plain">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <div class="header header-info text-center">
+                        <h4 class="card-title">Görev Ekle</h4>  
+                        <p class="description text-center" style="color:white;">
+                            Buradan  görev ekleyebilirsiniz.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-body mr-5 ml-4">
+                    <form class="form" method="" action="">
+                        <div class="card-content py-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">text_format</i>
+                                </span>
+                                <div class="form-group is-empty">
+                                    <input id="gorevEkleProjeId" value="0" style="display: none;">
+                                    <input id="todoNameAdd" type="text" class="form-control" style="color: black!important;" placeholder="Görev adını giriniz.">
+                                </div>
+                            </div>
+                            @*<div class="form-group is-empty">
+                                    <label class="label-control">Bitiş Tarihi</label>
+                                    <input style="color:black!important;" type="datetime-local" class="form-control datepicker" id="todoEndDate" value="" autocomplete="off" />
+                                </div>*@
+                            <div class="form-group is-empty">
+                                <label class="label-control">Bitiş Tarihi</label>
+                                <input style="color:black!important;" type="text" class="form-control datepicker" id="todoEndDateAdd" value="" autocomplete="off">
+                                <span class="material-input"></span>
+                            </div>
+
+                            <div id="divGorevEkleCalisanSecSelect" class="form-group is-empty">
+                                <select class="form-control select2" multiple="multiple" data-placeholder="Çalışanları Seç" style="width: 100%;"></select>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">short_text</i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-center m-5 my-auto py-4"
+                     style="border-top: 1px solid #f1efef;">
+                    <button onclick="saveTodo()" class="btn btn-info btn-round">
+                        <i class="material-icons">save_alt</i> Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="gorevEkleModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style=" display: none;">
+    <div class="modal-dialog modal-login">
+        <div class="modal-content">
+            <div class="card card-signup card-plain">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <div class="header header-info text-center">
+                        <h4 class="card-title">Görev Düzenle</h4>
+                        <p class="description text-center" style="color:white;">
+                            Buradan  görev düzenleyebilirsiniz.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-body mr-5 ml-4">
+                    <form class="form" method="" action="">
+                        <div class="card-content py-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">text_format</i>
+                                </span>
+                                <div class="form-group is-empty">
+                                    <input id="gorevDüzenleProjeId" value="0" style="display: none;">
+                                    <input id="düzenletodoName" type="text" class="form-control" style="color: black!important;" placeholder="Görev adını giriniz.">
+                                </div>
+                            </div>
+                            @*<div class="form-group is-empty">
+                                    <label class="label-control">Bitiş Tarihi</label>
+                                    <input style="color:black!important;" type="datetime-local" class="form-control datepicker" id="todoEndDate" value="" autocomplete="off" />
+                                </div>*@
+                            <div class="form-group is-empty">
+                                <label class="label-control">Bitiş Tarihi</label>
+                                <input style="color:black!important;" type="text" class="form-control datepicker" id="düzenletodoEndDate" value="" autocomplete="off">
+                                <span class="material-input"></span>
+                            </div>
+
+                            <div id="divGorevDüzenleCalisanSecSelect" class="form-group is-empty">
+                                <select class="form-control select2" multiple="multiple" data-placeholder="Çalışanları Seç" style="width: 100%;"></select>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">short_text</i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-center m-5 my-auto py-4"
+                     style="border-top: 1px solid #f1efef;">
+                    <button onclick="updateTodo()" class="btn btn-info btn-round">
+                        <i class="material-icons">save_alt</i> Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="gorevEkleModal2Proje" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style=" display: none;">
+    <div class="modal-dialog modal-login">
+        <div class="modal-content">
+            <div class="card card-signup card-plain">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <div class="header header-info text-center">
+                        <h4 class="card-title">Görev Düzenle</h4>
+                        <p class="description text-center" style="color:white;">
+                            Buradan  görev düzenleyebilirsiniz.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-body mr-5 ml-4">
+                    <form class="form" method="" action="">
+                        <div class="card-content py-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">text_format</i>
+                                </span>
+                                <div class="form-group is-empty">
+                                    <select class="selectpicker" data-style="select-with-transition" title="PROJE SEÇİNİZ" id="taskProjeId"></select>
+                                </div>
+                                <div class="form-group is-empty">
+                                    <input id="gorevDüzenleProjeId" value="0" style="display: none;">
+                                    <input id="düzenletodoName" type="text" class="form-control" style="color: black!important;" placeholder="Görev adını giriniz.">
+                                </div>
+                            </div>
+                            @*<div class="form-group is-empty">
+                                    <label class="label-control">Bitiş Tarihi</label>
+                                    <input style="color:black!important;" type="datetime-local" class="form-control datepicker" id="todoEndDate" value="" autocomplete="off" />
+                                </div>*@
+                            <div class="form-group is-empty">
+                                <label class="label-control">Bitiş Tarihi</label>
+                                <input style="color:black!important;" type="text" class="form-control datepicker" id="düzenletodoEndDate" value="" autocomplete="off">
+                                <span class="material-input"></span>
+                            </div>
+
+                            <div id="divGorevDüzenleCalisanSecSelect" class="form-group is-empty">
+                                <select class="form-control select2" multiple="multiple" data-placeholder="Çalışanları Seç" style="width: 100%;"></select>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">short_text</i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-center m-5 my-auto py-4"
+                     style="border-top: 1px solid #f1efef;">
+                    <button onclick="updateTodo()" class="btn btn-info btn-round">
+                        <i class="material-icons">save_alt</i> Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .swal2-container {
+          z-index: 99999999999999999999999999999999999999999999999999999999999999999 !important;
+        }
+    .pure-material-checkbox {
+        z-index: 0;
+        position: relative;
+        display: inline-block;
+        color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.87);
+        font-family: var(--pure-material-font, "Roboto", "Segoe UI", BlinkMacSystemFont, system-ui, -apple-system);
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+        /* Input */
+        .pure-material-checkbox > input {
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            z-index: -1;
+            position: absolute;
+            left: -10px;
+            top: -8px;
+            display: block;
+            margin: 0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.6);
+            box-shadow: none;
+            outline: none;
+            opacity: 0;
+            transform: scale(1);
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+
+        /* Span */
+        .pure-material-checkbox > span {
+            display: inline-block;
+            width: 100%;
+            cursor: pointer;
+        }
+
+            /* Box */
+            .pure-material-checkbox > span::before {
+                content: "";
+                display: inline-block;
+                box-sizing: border-box;
+                margin: 3px 11px 3px 1px;
+                border: solid 2px; /* Safari */
+                border-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.6);
+                border-radius: 2px;
+                width: 18px;
+                height: 18px;
+                vertical-align: top;
+                transition: border-color 0.2s, background-color 0.2s;
+            }
+
+            /* Checkmark */
+            .pure-material-checkbox > span::after {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 3px;
+                left: 1px;
+                width: 10px;
+                height: 5px;
+                border: solid 2px transparent;
+                border-right: none;
+                border-top: none;
+                transform: translate(3px, 4px) rotate(-45deg);
+            }
+
+        /* Checked, Indeterminate */
+        .pure-material-checkbox > input:checked,
+        .pure-material-checkbox > input:indeterminate {
+            background-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+        }
+
+            .pure-material-checkbox > input:checked + span::before,
+            .pure-material-checkbox > input:indeterminate + span::before {
+                border-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+                background-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+            }
+
+            .pure-material-checkbox > input:checked + span::after,
+            .pure-material-checkbox > input:indeterminate + span::after {
+                border-color: rgb(var(--pure-material-onprimary-rgb, 255, 255, 255));
+            }
+
+            .pure-material-checkbox > input:indeterminate + span::after {
+                border-left: none;
+                transform: translate(4px, 3px);
+            }
+
+        /* Hover, Focus */
+        .pure-material-checkbox:hover > input {
+            opacity: 0.04;
+        }
+
+        .pure-material-checkbox > input:focus {
+            opacity: 0.12;
+        }
+
+        .pure-material-checkbox:hover > input:focus {
+            opacity: 0.16;
+        }
+
+        /* Active */
+        .pure-material-checkbox > input:active {
+            opacity: 1;
+            transform: scale(0);
+            transition: transform 0s, opacity 0s;
+        }
+
+            .pure-material-checkbox > input:active + span::before {
+                border-color: rgb(var(--pure-material-primary-rgb, 33, 150, 243));
+            }
+
+        .pure-material-checkbox > input:checked:active + span::before {
+            border-color: transparent;
+            background-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.6);
+        }
+
+        /* Disabled */
+        .pure-material-checkbox > input:disabled {
+            opacity: 0;
+        }
+
+            .pure-material-checkbox > input:disabled + span {
+                color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.38);
+                cursor: initial;
+            }
+
+                .pure-material-checkbox > input:disabled + span::before {
+                    border-color: currentColor;
+                }
+
+        .pure-material-checkbox > input:checked:disabled + span::before,
+        .pure-material-checkbox > input:indeterminate:disabled + span::before {
+            border-color: transparent;
+            background-color: currentColor;
+        }
+</style>
+<script>
+    var selectedToProjectId = 0;
+    function Dropped(event, ui){
+      $(".draggable").each(function(){
+        //My Logic goes here
+
+      });
+
+    }
+
+    $(document).ready(function(){
+        fillPano();
+    });
+    function gorevEkleModal() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllQuickTaskUser", "QuickTask")',
+            data: {
+            },
+            success: function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    //$("#divGorevEkleCalisanSecSelect select option[value='" + data[i]["Id"] + "']").attr("selected", "selected");
+                    html += '<option value="' + data[i]["Id"] + '">' + data[i]["Name"] +" "+ data[i]["Surname"] +  '</option>';
+                }
+                $("#divGorevEkleCalisanSecSelect select").html(html);
+                $('.selectpicker').selectpicker('refresh');
+                $('.select2').select2();
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+        $('#gorevEkleModal').modal('show');
+    }
+    function gorevEkleModalProje() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllQuickTaskUser", "QuickTask")',
+            data: {
+            },
+            success: function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    //$("#divGorevEkleCalisanSecSelect select option[value='" + data[i]["Id"] + "']").attr("selected", "selected");
+                    html += '<option value="' + data[i]["Id"] + '">' + data[i]["Name"] +" "+ data[i]["Surname"] +  '</option>';
+                }
+                $("#divGorevEkleCalisanSecSelect2 select").html(html);
+                $('.selectpicker').selectpicker('refresh');
+                $('.select2').select2();
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllQuickTaskProject", "QuickTask")',
+            data: {
+            },
+            success: function (data) {
+                var html = '<select class="selectpicker" data-style="select-with-transition" id="taskProjeId2" title="PROJE SEÇİNİZ">';
+                    for(var i = 0; i < data.length; i++)
+                    {
+                        html+= `<option value="`+data[i]["Id"]+`">`+data[i]["Name"]+`</option>`;
+                    }
+                    html += "</select>";
+                    $("#divProjectSelect").html(html);
+                    $('.selectpicker').selectpicker();
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+        $('#gorevEkleModalProje').modal('show');
+    }
+    function gorevEkleModal2(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllQuickTaskUser", "QuickTask")',
+            data: {
+            },
+            success: function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    //$("#divGorevEkleCalisanSecSelect select option[value='" + data[i]["Id"] + "']").attr("selected", "selected");
+                    html += '<option value="' + data[i]["Id"] + '">' + data[i]["Name"] +" "+ data[i]["Surname"] +  '</option>';
+                }
+                $("#divGorevDüzenleCalisanSecSelect select").html(html);
+                $('.selectpicker').selectpicker('refresh');
+                $('.select2').select2();
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetQuickTaskById", "QuickTask")',
+            data: {
+                "_todoId": id
+            },
+            success: function (data) {
+
+                var persons = data[0].Persons;
+
+                for (var i = 0; i < persons.length; i++) {
+                    $("#divGorevDüzenleCalisanSecSelect select option[value='" + persons[i].Id + "']").attr("selected", "selected");
+                }
+
+                $('#düzenletodoEndDate').val(data[0].StrDate);
+                $('#düzenletodoName').val(data[0].Detail);
+                $('#düzenletodoId').val(data[0].Id);
+
+                $('.selectpicker').selectpicker('refresh');
+                $('.select2').select2();
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+
+        $('#gorevEkleModal2').modal('show');
+    }
+     function gorevEkleModal2Proje(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllQuickTaskUser", "QuickTask")',
+            data: {
+            },
+            success: function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    //$("#divGorevEkleCalisanSecSelect select option[value='" + data[i]["Id"] + "']").attr("selected", "selected");
+                    html += '<option value="' + data[i]["Id"] + '">' + data[i]["Name"] +" "+ data[i]["Surname"] +  '</option>';
+                }
+                $("#divGorevDüzenleCalisanSecSelect select").html(html);
+                $('.selectpicker').selectpicker('refresh');
+                $('.select2').select2();
+            },
+            error: function (err) {
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetQuickTaskById", "QuickTask")',
+            data: {
+                "_todoId": id
+            },
+            success: function (data) {
+
+                var persons = data[0].Persons;
+
+                for (var i = 0; i < persons.length; i++) {
+                    $("#divGorevDüzenleCalisanSecSelect select option[value='" + persons[i].Id + "']").attr("selected", "selected");
+                }
+
+                $('#düzenletodoEndDate').val(data[0].StrDate);
+                $('#düzenletodoName').val(data[0].Detail);
+                $('#düzenletodoId').val(data[0].Id);
+
+                $('.selectpicker').selectpicker('refresh');
+                $('.select2').select2();
+            },
+            error: function (err) {
+
+            }
+        });
+
+        $('#gorevEkleModal2').modal('show');
+    }
+    function fillPano() {
+        $('#divMain').html('<div class="row mt-5"></div>');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllQuickTaskProject", "QuickTask")',
+            data: {},
+            success: function (data) {
+                console.log(data);
+                if (data.length == 1) {
+                    gorevEkleModal();
+                }
+                else {
+                    gorevEkleModalProje();
+                }
+                   },
+            error: function (err) {
+
+            }
+        });
+    }
+    function saveTodo() {
+        var todoName = $('#todoNameAdd').val();
+        var todoEndDate = $('#todoEndDateAdd').val();
+        var todoUsers=$('#divGorevEkleCalisanSecSelect select').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveQuickTask", "QuickTask")',
+            data: {
+                "_projectId": selectedToProjectId,
+                "_todoName": todoName,
+                "_todoEndDate": todoEndDate,
+                "_todoUsers":todoUsers
+            },
+            success: function (data) {
+                $('#gorevEkleModal').modal('hide');
+                swal("kayıt başarılı!");
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+    }
+    function saveTodoProje() {
+        var todoName = $('#todoName').val();
+        var todoEndDate = $('#todoEndDate').val();
+        var todoUsers=$('#divGorevEkleCalisanSecSelect2 select').val();
+        var projectId = $('#taskProjeId2').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveQuickTask", "QuickTask")',
+            data: {
+                "_projectId": projectId,
+                "_todoName": todoName,
+                "_todoEndDate": todoEndDate,
+                "_todoUsers":todoUsers
+            },
+            success: function (data) {
+                $('#gorevEkleModalProje').modal('hide');
+                swal("kayıt başarılı!");
+                //fillPano();
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+    }
+    function updateTodo() {
+        var todoName = $('#düzenletodoName').val();
+        var todoEndDate = $('#düzenletodoEndDate').val();
+        var todoId = $('#todoIdForUpdate').val();
+        var todoUsers = $('#divGorevDüzenleCalisanSecSelect select').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateQuickTask", "QuickTask")',
+            data: {
+                "_projectId": selectedToProjectId,
+                "_todoId": todoId,
+                "_todoName": todoName,
+                "_todoEndDate": todoEndDate,
+                "_todoUsers":todoUsers
+            },
+            success: function (data) {
+                $('#gorevEkleModal2').modal('hide');
+                $('#gorevEkleModal2Proje').modal('hide');
+                swal("kayıt başarılı!");
+                fillPano();
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+    }
+    function deleteToDo(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteQuickTask", "QuickTask")',
+            data: {
+                "_todoId": id
+            },
+            success: function (data) {
+                swal("silindi!");
+                fillPano();
+            },
+            error: function (err) {
+                swal("hata!");
+            }
+        });
+    }
+
+</script>
